@@ -206,7 +206,7 @@ export function Price({ p, size }) {
   const s = size || mainSize(p)
   const many = !size && sizesOf(p).length > 1
   const val = size ? s.price : minPrice(p)
-  if (!val) return <span className="price ask">{u.askPrice}</span>
+  if (!val) return null
   return (
     <span className="price">
       {many && <small>{u.from} </small>}{money(val, lang)}

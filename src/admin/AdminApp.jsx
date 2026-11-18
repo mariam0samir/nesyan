@@ -241,7 +241,7 @@ const PRODUCT_FIELDS = [
   T('image_url', 'image', 'صورة الزجاجة (بتظهر في الكارت)', { half: true }), T('box_url', 'image', 'صورة العلبة (بتظهر لما تلمسي الكارت)', { half: true }),
   T('gallery', 'images', 'صور إضافية لصفحة العطر'),
   T('liquid', 'text', 'لون السائل للزجاجة 3D (مثال #dea735)', { half: true, ltr: true }),
-  T('sizes', 'sizes', 'الأحجام والأسعار — السعر 0 = «السعر عند الطلب» والطلب بيبقى على واتساب'),
+  T('sizes', 'sizes', 'الأحجام والأسعار — لو السعر 0 مش هيظهر سعر، والطلب بيبقى على واتساب'),
   T('gender', 'select', 'النوع', { half: true, options: Object.entries(GENDERS).map(([k, v]) => [k, v[0]]) }),
   T('family', 'select', 'المجموعة الموسمية', { half: true, options: Object.entries(FAMILIES).map(([k, v]) => [k, v[0]]) }),
   T('concentration', 'text', 'التركيز (اختياري)', { half: true, ltr: true }), T('year', 'number', 'سنة الإصدار', { half: true }),

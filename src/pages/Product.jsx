@@ -70,7 +70,7 @@ function ProductView({ p }) {
             <p className="pinfo-brand">NESYAN · {t2(GENDERS[p.gender])}{p.inspired && ` · ${u.inspired}`}</p>
             <h1>{tx(p, 'name')}</h1>
             {tx(p, 'tagline') && <p className="pinfo-tag">{tx(p, 'tagline')}</p>}
-            <p className="pinfo-price">{cur.price > 0 ? <><span key={cur.label}>{money(cur.price, lang)}</span>{cur.compare > cur.price && <del>{money(cur.compare, lang)}</del>}</> : <span className="ask">{u.askPrice}</span>}</p>
+            {cur.price > 0 && <p className="pinfo-price"><span key={cur.label}>{money(cur.price, lang)}</span>{cur.compare > cur.price && <del>{money(cur.compare, lang)}</del>}</p>}
             {sizes.length > 0 && (
               <div className="opt">
                 <p>{u.size}: <b>{cur.label}</b></p>
