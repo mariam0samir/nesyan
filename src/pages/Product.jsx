@@ -56,12 +56,12 @@ function ProductView({ p }) {
           {/* المعرض */}
           <div className="pg">
             <div className="pg-thumbs">
-              {imgs.map((src, k) => <button key={src} type="button" className={k === img ? 'on' : ''} onClick={() => setImg(k)} aria-label={[u.bottle, u.box, u.both][k] || String(k + 1)}><img src={src} alt="" /></button>)}
+              {imgs.map((src, k) => <button key={src} type="button" className={k === img ? 'on' : ''} onClick={() => setImg(k)} aria-label={[u.bottle, u.box, u.both][k] || String(k + 1)}><img src={src} alt="" className={src.includes('/media/') ? 'photo' : ''} /></button>)}
             </div>
             <div className="pg-main" onMouseMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); setZoom({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 }) }} onMouseLeave={() => setZoom(null)}>
-              <img key={img} src={imgs[img]} alt={tx(p, 'name')} style={zoom ? { transformOrigin: `${zoom.x}% ${zoom.y}%`, transform: 'scale(1.6)' } : undefined} />
+              <img key={img} src={imgs[img]} className={imgs[img]?.includes('/media/') ? 'photo' : ''} alt={tx(p, 'name')} style={zoom ? { transformOrigin: `${zoom.x}% ${zoom.y}%`, transform: 'scale(1.6)' } : undefined} />
               <div className="pg-badges">{p.is_new && <span className="bdg">{u.new}</span>}{p.is_exclusive && <span className="bdg red">{u.exclusive}</span>}</div>
-              {imgs.length > 1 && <div className="pg-switch">{imgs.slice(0, 3).map((_, k) => <button key={k} type="button" className={k === img ? 'on' : ''} onClick={() => setImg(k)}>{[u.bottle, u.box, u.both][k]}</button>)}</div>}
+              {imgs.length > 1 && <div className="pg-switch">{imgs.slice(0, 2).map((_, k) => <button key={k} type="button" className={k === img ? 'on' : ''} onClick={() => setImg(k)}>{[u.bottle, u.box][k]}</button>)}</div>}
             </div>
           </div>
 

@@ -135,7 +135,7 @@ function Banner() {
   const ref = useRef(null)
   useEffect(() => {
     const el = ref.current; if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const on = () => { const r = el.getBoundingClientRect(); const p = (r.top + r.height / 2 - innerHeight / 2) / innerHeight; el.style.setProperty('--py', `${p * -60}px`) }
+    const on = () => { const r = el.getBoundingClientRect(); const p = (r.top + r.height / 2 - innerHeight / 2) / innerHeight; el.style.setProperty('--py', `${Math.max(-60, Math.min(60, p * -60))}px`) }
     on(); addEventListener('scroll', on, { passive: true }); return () => removeEventListener('scroll', on)
   }, [])
   return (
