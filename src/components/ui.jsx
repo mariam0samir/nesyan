@@ -118,17 +118,26 @@ export function PhotoSpin({ p, spin = false, auto = 0, drag = false, className =
   }, [p.slug])
   useEffect(() => {
     const el = ref.current; if (!ok || !el) return
-    let angle = -0.35, dragging = false, raf = 0, last = 0
+    // الزاوية الحالية بتمشي ناحية الزاوية المطلوبة بنعومة (من غير قفزات)
+    let angle = -0.35, target = -0.35, dragging = false, raf = 0, last = 0, shown = NaN
+    const ease = (t) => t * t * (3 - 2 * t)
     const paint = () => {
       let d = (((angle + 0.35) * 180) / Math.PI) % 360; if (d < 0) d += 360
-      const pos = d / 45, i = Math.floor(pos) % 8, j = (i + 1) % 8, f = pos - Math.floor(pos)
-      const set = (img, k, o) => { const s2 = src(SPIN_VIEWS[k]); if (img.dataset.s !== s2) { img.src = s2; img.dataset.s = s2 } img.style.transform = SPIN_FLIP[k] ? 'scaleX(-1)' : ''; img.style.opacity = o }
-      set(aRef.current, i, 1); set(bRef.current, j, f.toFixed(3))
+      const pos = d / 45, i = Math.floor(pos) % 8, j = (i + 1) % 8, f = ease(pos - Math.floor(pos))
+      const set = (img, k, o) => { const s2 = src(SPIN_VIEWS[k]); if (img.dataset.s !== s2) { img.src = s2; img.dataset.s = s2 } const fl = SPIN_FLIP[k] ? 'scaleX(-1)' : 'none'; if (img.style.transform !== fl) img.style.transform = fl; img.style.opacity = o }
+      set(aRef.current, i, (1 - f * 0.35).toFixed(3)); set(bRef.current, j, f.toFixed(3))
+      shown = angle
     }
-    const h = { setAngle(a) { angle = a; paint() }, get angle() { return angle }, setDrag(v) { dragging = v } }
-    el.__b3d = h; paint()
-    const tick = (t) => { if (auto && !dragging) { angle += auto * Math.min(0.05, (t - (last || t)) / 1000); paint() } last = t; raf = requestAnimationFrame(tick) }
-    if (auto) raf = requestAnimationFrame(tick)
+    const tick = (t) => {
+      const dt = Math.min(0.05, (t - (last || t)) / 1000); last = t
+      if (auto && !dragging) target += auto * dt
+      angle += (target - angle) * (dragging ? 0.5 : 1 - Math.pow(0.0025, dt))
+      if (Math.abs(target - angle) < 0.0004) angle = target
+      if (angle !== shown) paint()
+      raf = requestAnimationFrame(tick)
+    }
+    const h = { setAngle(a) { target = a }, get angle() { return target }, setDrag(v) { dragging = v } }
+    el.__b3d = h; paint(); raf = requestAnimationFrame(tick)
     let x0 = 0, a0 = 0, moved = false
     const dn = (e) => { if (!drag) return; dragging = true; x0 = e.clientX; a0 = angle; moved = false; el.setPointerCapture?.(e.pointerId) }
     const mv = (e) => { if (!drag || !el.hasPointerCapture?.(e.pointerId)) return; const dx = e.clientX - x0; if (Math.abs(dx) > 3) moved = true; h.setAngle(a0 + dx * 0.012) }
@@ -159,15 +168,12 @@ export function useScrollSpin() {
         const r = el.getBoundingClientRect()
         if (r.bottom < -50 || r.top > vh + 50) return
         const p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)))
-        // لفّتين أسرع، والوش بيقف شوية والضهر بيعدّي بسرعة
-        const turns = p * 2, n = Math.floor(turns), t = turns - n
-        const g = t - (0.85 * Math.sin(2 * Math.PI * t)) / (2 * Math.PI)
-        el.__b3d.setAngle(-0.35 + (n + g) * Math.PI * 2)
+        el.__b3d.setAngle(-0.35 + p * Math.PI * 2)
       })
     }
     const on = () => { if (!raf) raf = requestAnimationFrame(run) }
     run(); addEventListener('scroll', on, { passive: true }); addEventListener('resize', on)
-    const t = setInterval(on, 800)
+    const t = setInterval(on, 250)
     return () => { removeEventListener('scroll', on); removeEventListener('resize', on); clearInterval(t); cancelAnimationFrame(raf) }
   }, [pathname])
 }
