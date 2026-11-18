@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useLang } from '../lib/i18n'
 import { useBlock, useCart, useProducts, lines, pipes, money, sendMessage, waLink, commas } from '../lib/store'
@@ -103,6 +104,7 @@ export function Header() {
         </div>
       </nav>
 
+      {createPortal(<>
       {/* بحث الموبايل */}
       <div className={`search-ov ${search ? 'is-open' : ''}`} onClick={() => setSearch(false)}>
         <div className="search-ov-in" onClick={(e) => e.stopPropagation()}>
@@ -121,6 +123,7 @@ export function Header() {
         </nav>
         <div className="mnav-foot"><button type="button" className="btn btn-line" onClick={toggle}>{u.lang}</button><Socials /></div>
       </aside>
+      </>, document.body)}
     </header>
   )
 }

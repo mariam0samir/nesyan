@@ -832,3 +832,18 @@ canvas.b3d.is-drag:active { cursor: grabbing; }
 .pspin.is-drag { cursor: grab; }
 .pspin.is-drag:active { cursor: grabbing; }
 .pg-main > .pspin { width: 86%; height: 86%; }
+
+/* هيدر: لوجو أكبر في الشاشات الكبيرة وأصغر في الموبايل */
+@media (min-width: 1200px) { .hdr-logo .logo { height: 68px; } .hdr.is-solid .hdr-logo .logo { height: 50px; } .hdr-main { height: 104px; } }
+@media (min-width: 1600px) { .hdr-logo .logo { height: 78px; } .hdr.is-solid .hdr-logo .logo { height: 56px; } }
+@media (max-width: 560px) { .hdr-logo .logo { height: 32px; } .hdr.is-solid .hdr-logo .logo { height: 28px; } .hdr-main { height: 60px; } .hdr.is-solid .hdr-main { height: 54px; } }
+@media (max-width: 380px) { .hdr-logo .logo { height: 28px; } }
+/* كارت الهيرو أصغر في الموبايل */
+@media (max-width: 640px) {
+  .hero-card { width: min(340px, calc(100% - 48px)); padding: 16px 16px 18px; bottom: 44px; }
+  .hero-card::before { inset: 5px; }
+  .hero-card h1 { font-size: 24px; margin-bottom: 4px; }
+  .hero-card p, :lang(ar) .hero-card p { font-size: 13px; margin-bottom: 12px; }
+  .hero-card .btn { padding: 10px 22px; font-size: 13px; }
+}
+@media (max-width: 380px) { .hero-card h1 { font-size: 21px; } }
