@@ -30,7 +30,7 @@ export const PRODUCTS = [
     "description_ar": "فخامة إيطالية .. مزيج من الدخان والعسل والفواكه الراقية.\n\nعطر رجالي فاخر ومنعش بتركيز عالي وثبات يدوم طويلًا — لكل المناسبات نهارًا ومساءً، بجودة عالية ولمسة نسيان. الحجم 50 مل.",
     "description_en": "Italian luxury — a blend of smoke, honey and fine fruits.\n\nA men’s scent, luxurious and fresh, with high concentration and long-lasting wear — for every occasion, day and night. High quality with the Nesyan touch. 50 ml.",
     "inspired": false,
-    "gallery": "/media/posters/naxos-1.webp\n/media/posters/naxos-4.webp\n/media/posters/naxos-2.webp\n/media/posters/naxos-3.webp\n/products/naxos-duo.webp\n/media/posters/naxos.webp",
+    "gallery": "/media/posters/naxos-gold-1.webp\n/media/posters/naxos-gold-2.webp\n/media/posters/naxos-1.webp\n/media/posters/naxos-4.webp\n/media/posters/naxos-2.webp\n/media/posters/naxos-3.webp\n/products/naxos-duo.webp\n/media/posters/naxos.webp",
     "is_new": true,
     "is_bestseller": false,
     "is_exclusive": true,
@@ -205,7 +205,7 @@ export const PRODUCTS = [
     "description_ar": "عطر رجالي مستوحى من Acqua di Giò — منعش، مائي، كلاسيكي.\n\nتركيز عالي، ثبات يدوم طويلًا وفوحان مميز. الحجم المتاح 50 مل للاستخدام الخاص.",
     "description_en": "A men’s scent inspired by Acqua di Giò — fresh, aquatic, classic.\n\nHigh concentration, long-lasting wear and strong projection. Available in 50 ml.",
     "inspired": true,
-    "gallery": "/products/acqua-di-gio-duo.webp",
+    "gallery": "/media/posters/acqua-di-gio-2.webp\n/products/acqua-di-gio-duo.webp",
     "is_new": false,
     "is_bestseller": false,
     "is_exclusive": false,
@@ -745,7 +745,7 @@ export const GENDERS = { women: ['نسائي', 'Women'], men: ['رجالي', 'Me
 
 export const BLOCKS = {
   // ترتيب أقسام الرئيسية: سطر لكل قسم، و"-" قبله = مخفي
-  home: { sections: 'hero\ntagline\ncategories\nnovelties\neditorial\ntiles\nbanner\narrivals\ndiscovery\nsplits\ntryme\ndarktiles' },
+  home: { sections: 'hero\ntagline\ncategories\nadbanner\nnovelties\neditorial\ntiles\nbanner\narrivals\ndiscovery\nsplits\ntryme\ndarktiles' },
   announce: {
     items_ar: 'عطر يبقى في الذاكرة .. لحظات لا تُنسى برائحة تدوم\nتركيز عالي · ثبات طويل · فوحان مميز\nاطلب الآن على واتساب 01105224649',
     items_en: 'A scent that stays in memory — unforgettable moments\nHigh concentration · Long lasting · Strong projection\nOrder now on WhatsApp 01105224649',
@@ -757,6 +757,7 @@ export const BLOCKS = {
     links: '/shop\n/p/naxos\n/p/40-knots',
     button_ar: 'اكتشف العطر', button_en: 'Discover',
   },
+  adbanner: { image_url: '/media/ad-naxos.webp', mobile_image_url: '/media/ad-naxos-mobile.webp', link: '/p/naxos', alt_ar: 'ناكسوس من نسيان — عطر .. لا يُنسى', alt_en: 'Naxos by Nesyan — A scent .. unforgettable' },
   tagline: { title_ar: 'عطر .. لا يُنسى', title_en: 'A scent .. unforgettable' },
   categories: {
     items: 'حريمي | Women | /shop?gender=women | /products/rose-vanille-bottle.webp | #f3dfe0\nرجالي | Men | /shop?gender=men | /products/creed-aventus-bottle.webp | #ece4d2\nللجنسين | Unisex | /shop?gender=unisex | /products/oud-madawi-bottle.webp | #eadccb\nصيفية | Summer | /shop?family=summer | /products/acqua-di-gio-bottle.webp | #e3eef2\nلجميع الفصول | All season | /shop?family=allseason | /products/one-million-bottle.webp | #f1e6cf\nشتوية | Winter | /shop?family=winter | /products/khamrah-qahwa-bottle.webp | #e8dacb\nليلية | Night | /shop?family=night | /products/white-oud-bottle.webp | #e9e1ec',
@@ -802,7 +803,7 @@ export const BLOCKS = {
     hero_image_url: '/media/story.webp', title_ar: 'عطر يبقى في الذاكرة', title_en: 'A scent that stays in memory',
     text_ar: 'نسيان .. عطر لا يُنسى. لحظات لا تُنسى برائحة تدوم.\n\nنقدّم مجموعة من العطور المستوحاة من أشهر العطور العالمية — صيفية ومنعشة، ولجميع الفصول، وشتوية ودافئة، وليلية فاخرة — بتركيز عالي وثبات يدوم طويلًا وفوحان مميز.\n\nوإلى جانبها إصدارات نسيان الخاصة: ناكسوس، بارادايم، فورتي نوتس وأرابيانز تونكا.',
     text_en: 'Nesyan — a scent .. unforgettable. Unforgettable moments with a lasting scent.\n\nWe offer a collection inspired by the world’s most famous perfumes — summer & fresh, all season, winter & warm and winter & night — with high concentration, long-lasting wear and strong projection.\n\nAlongside them, Nesyan’s own editions: Naxos, Paradigme, 40 Knots and Arabians Tonka.',
-    image2_url: '/media/posters/collection.webp',
+    image2_url: '/media/about-collection.webp',
     values_ar: 'تصنيع بعناية | كل زجاجة مصنوعة بعناية\nتركيبات مستوحاة | من أشهر العطور العالمية\nثبات وفوحان | تركيز عالي يدوم طويلًا',
     values_en: 'Carefully crafted | Every bottle made with care\nInspired scents | From the world’s most famous perfumes\nLasting & projecting | High concentration that lasts',
   },

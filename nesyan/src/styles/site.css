@@ -719,3 +719,14 @@ body.no-scroll .wa-float, body.no-scroll .totop, body.no-scroll-cart .wa-float, 
 .pg-main > img.photo { width: 100%; height: 100%; object-fit: cover; filter: none; }
 .pg-thumbs img.photo { width: 100%; height: 100%; object-fit: cover; }
 @media (max-width: 640px) { .pg-thumbs { overflow-x: auto; scrollbar-width: none; min-width: 0; } .pg { min-width: 0; } }
+
+/* البانر الإعلاني */
+.adbanner { padding-block: clamp(30px, 4vw, 60px) 0; }
+.adbanner-in { position: relative; display: block; overflow: hidden; background: #000; width: min(var(--wrap), calc(100% - 48px)); margin-inline: auto; box-shadow: 0 40px 80px -50px rgba(0,0,0,.6); }
+.adbanner-in img { width: 100%; height: auto; display: block; transition: transform 2.2s var(--ease); }
+.adbanner-in:hover img { transform: scale(1.035); }
+.adbanner-shine { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 35%, rgba(255, 230, 170, .22) 50%, transparent 65%); transform: translateX(-110%); pointer-events: none; }
+.adbanner-in.in .adbanner-shine { animation: adShine 2.4s var(--ease) .6s; }
+.adbanner-in:hover .adbanner-shine { animation: adShine 1.6s var(--ease); }
+@keyframes adShine { to { transform: translateX(110%); } }
+@media (max-width: 640px) { .adbanner-in { width: 100%; } }

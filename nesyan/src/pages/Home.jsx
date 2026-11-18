@@ -62,6 +62,24 @@ function Tagline() {
   )
 }
 
+/* ───────── بانر إعلاني (صورة تصميم كاملة) ───────── */
+function AdBanner() {
+  const b = useBlock('adbanner')
+  const { tx } = useLang()
+  if (!b.image_url) return null
+  return (
+    <section className="adbanner">
+      <Link to={b.link || '/shop'} className="adbanner-in" data-reveal aria-label={tx(b, 'alt')}>
+        <picture>
+          {b.mobile_image_url && <source media="(max-width: 640px)" srcSet={b.mobile_image_url} />}
+          <img src={b.image_url} alt={tx(b, 'alt')} loading="lazy" />
+        </picture>
+        <span className="adbanner-shine" />
+      </Link>
+    </section>
+  )
+}
+
 /* ───────── دواير الأقسام (Faces) ───────── */
 function Categories() {
   const c = useBlock('categories')
@@ -256,7 +274,7 @@ function DarkTiles() {
 }
 
 export const HOME_SECTIONS = {
-  hero: Hero, tagline: Tagline, categories: Categories, novelties: Novelties, editorial: Editorial, tiles: Tiles,
+  hero: Hero, tagline: Tagline, categories: Categories, adbanner: AdBanner, novelties: Novelties, editorial: Editorial, tiles: Tiles,
   banner: Banner, arrivals: Arrivals, discovery: Discovery, splits: Splits, tryme: TryMe, darktiles: DarkTiles,
 }
 
