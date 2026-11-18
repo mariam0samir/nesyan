@@ -151,7 +151,7 @@ function ProductView({ p }) {
 
       <section className="sec related">
         <div className="wrap"><h2 className="sec-title center-t" data-reveal>{u.youMayLike}</h2></div>
-        <Rail className="wrap">{related.map((x, k) => <ProductCard key={x.slug} p={x} i={k} />)}</Rail>
+        <Rail className="wrap" auto={3500}>{related.map((x, k) => <ProductCard key={x.slug} p={x} i={k} />)}</Rail>
       </section>
     </div>
   )

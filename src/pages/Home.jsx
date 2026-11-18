@@ -1,16 +1,26 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../lib/i18n'
-import { useBlock, useProducts, lines, pipes } from '../lib/store'
-import { Icon, ProductCard, Rail, SecHead, Price, ScentFinder } from '../components/ui'
+import { useBlock, useProducts, lines, pipes, commas } from '../lib/store'
+import { Icon, ProductCard, Rail, SecHead, Price, ScentFinder, Marquee } from '../components/ui'
 
 /* ───────── الواجهة: سلايدر بصور كاملة وكارت أبيض في النص (Jovoy) ───────── */
 function Hero() {
   const h = useBlock('hero')
   const { tx, u } = useLang()
-  const imgs = lines(h.images)
-  const slides = pipes(tx(h, 'slides'))
-  const links = lines(h.links)
+  const ad = useBlock('adbanner')
+  let imgs = lines(h.images)
+  let mimgs = lines(h.mobile_images)
+  let slides = pipes(tx(h, 'slides'))
+  let links = lines(h.links)
+  // صورة البانر الإعلاني بتبقى أول شريحة في السلايدر (لو مش موجودة فيه أصلًا)
+  if (ad.in_hero !== false && ad.hero_image_url && !imgs.includes(ad.hero_image_url)) {
+    const pad = (a) => [...a, ...Array(Math.max(0, imgs.length - a.length)).fill('')]
+    imgs = [ad.hero_image_url, ...imgs]
+    mimgs = [ad.hero_mobile_url || '', ...pad(mimgs)]
+    slides = [[tx(ad, 'title'), tx(ad, 'sub')], ...slides]
+    links = [ad.link || '/shop', ...pad(links)]
+  }
   const n = Math.max(imgs.length, 1)
   const [i, setI] = useState(0)
   const canvas = useRef(null)
@@ -38,7 +48,14 @@ function Hero() {
   const [title, sub] = slides[i % Math.max(slides.length, 1)] || []
   return (
     <section className="hero">
-      {imgs.map((src, k) => <img key={src + k} src={src} alt="" className={`hero-img ${k === i ? 'is-on' : ''}`} />)}
+      {imgs.map((src, k) => (
+        <picture key={src + k}>
+          {mimgs[k] && <source media="(max-width: 640px)" srcSet={mimgs[k]} />}
+          <img src={src} alt="" className={`hero-img ${k === i ? 'is-on' : ''}`} fetchPriority={k === 0 ? 'high' : 'low'} />
+        </picture>
+      ))}
+      {n > 1 && <button type="button" className="hero-arrow prev" onClick={() => setI((i - 1 + n) % n)} aria-label={u.prev}><Icon name="chev" size={22} className="flip-x" /></button>}
+      {n > 1 && <button type="button" className="hero-arrow next" onClick={() => setI((i + 1) % n)} aria-label={u.next}><Icon name="chev" size={22} /></button>}
       <canvas ref={canvas} className="hero-dust" aria-hidden="true" />
       <div className="hero-card" key={i}>
         {title && <h1>{title}</h1>}
@@ -65,6 +82,7 @@ function Tagline() {
 /* ───────── بانر إعلاني (صورة تصميم كاملة) ───────── */
 function AdBanner() {
   const b = useBlock('adbanner')
+  if (b.in_hero !== false && b.hero_image_url) return null
   const { tx } = useLang()
   if (!b.image_url) return null
   return (
@@ -105,7 +123,73 @@ function Novelties() {
   return (
     <section className="sec novelties">
       <div className="wrap"><SecHead title={tx(b, 'title')} center={false} /></div>
-      <Rail className="wrap">{list.map((p, k) => <ProductCard key={p.slug} p={p} notes i={k} />)}</Rail>
+      <Rail className="wrap" auto={2600}>{list.map((p, k) => <ProductCard key={p.slug} p={p} notes i={k} />)}</Rail>
+    </section>
+  )
+}
+
+/* ───────── شريط كلام متحرك ───────── */
+function TextMarquee() {
+  const b = useBlock('marquee')
+  const { tx } = useLang()
+  const items = lines(tx(b, 'items'))
+  if (!items.length) return null
+  return (
+    <section className="tmq" aria-hidden="true">
+      <Marquee speed={35}>{items.map((t, k) => <span key={k}>{t}<img src="/brand/mark.png" alt="" /></span>)}</Marquee>
+    </section>
+  )
+}
+
+/* ───────── شريط زجاجات متحرك ───────── */
+function BottlesMarquee() {
+  const b = useBlock('marquee')
+  const { tx } = useLang()
+  const all = useProducts()
+  if (!all.length) return null
+  const half = Math.ceil(all.length / 2)
+  const row = (list) => list.map((p) => <Link key={p.slug} to={`/p/${p.slug}`} className="bmq-item"><span className="bmq-spin"><img className="spin" data-spin src={p.image_url} alt="" loading="lazy" /></span><span>{tx(p, 'name')}</span></Link>)
+  return (
+    <section className="sec bmq">
+      <div className="wrap"><SecHead eyebrow={tx(b, 'eyebrow')} title={tx(b, 'title')} /></div>
+      <Marquee speed={60}>{row(all.slice(0, half))}</Marquee>
+      <Marquee speed={70} reverse>{row(all.slice(half))}</Marquee>
+    </section>
+  )
+}
+
+/* ───────── سلايدر العطر المميز (تلقائي) ───────── */
+function Spotlight() {
+  const b = useBlock('spotlight')
+  const { tx, u } = useLang()
+  const all = useProducts()
+  const list = lines(b.products).map((s) => all.find((p) => p.slug === s)).filter(Boolean)
+  const [i, setI] = useState(0)
+  const [hold, setHold] = useState(false)
+  useEffect(() => { if (list.length < 2 || hold) return; const t = setInterval(() => setI((x) => (x + 1) % list.length), 5000); return () => clearInterval(t) }, [list.length, hold, i])
+  if (!list.length) return null
+  const p = list[i % list.length]
+  const notes = [[u.top, 'notes_top'], [u.heart, 'notes_heart'], [u.base, 'notes_base']].map(([l, k]) => [l, commas(tx(p, k)).slice(0, 3).join(' · ')]).filter(([, v]) => v)
+  return (
+    <section className="spot" onMouseEnter={() => setHold(true)} onMouseLeave={() => setHold(false)}>
+      <div className="spot-bg" key={'bg' + p.slug} style={{ backgroundImage: `url(${p.image_url})` }} />
+      <div className="wrap spot-in">
+        <div className="spot-txt" key={'t' + p.slug}>
+          <p className="eyebrow">{tx(b, 'eyebrow')}</p>
+          <h2>{tx(p, 'name')}</h2>
+          <p className="spot-tag">{tx(p, 'tagline')}</p>
+          {notes.length > 0 && <dl className="spot-notes">{notes.map(([l, v], k) => <div key={l} style={{ '--i': k }}><dt>{l}</dt><dd>{v}</dd></div>)}</dl>}
+          <Link to={`/p/${p.slug}`} className="btn btn-gold">{u.discover}</Link>
+        </div>
+        <div className="spot-art">
+          <span className="spot-ring" />
+          <img key={'i' + p.slug} src={p.image_url} alt={tx(p, 'name')} />
+          {p.box_url && <img key={'b' + p.slug} className="spot-box" src={p.box_url} alt="" />}
+        </div>
+      </div>
+      <div className="wrap spot-nav">
+        {list.map((x, k) => <button key={x.slug} type="button" className={k === i % list.length ? 'on' : ''} onClick={() => setI(k)}><img src={x.image_url} alt="" /><span>{tx(x, 'name')}</span>{k === i % list.length && !hold && <i />}</button>)}
+      </div>
     </section>
   )
 }
@@ -274,7 +358,7 @@ function DarkTiles() {
 }
 
 export const HOME_SECTIONS = {
-  hero: Hero, tagline: Tagline, categories: Categories, adbanner: AdBanner, novelties: Novelties, editorial: Editorial, tiles: Tiles,
+  hero: Hero, tagline: Tagline, categories: Categories, adbanner: AdBanner, textmarquee: TextMarquee, spotlight: Spotlight, bottles: BottlesMarquee, novelties: Novelties, editorial: Editorial, tiles: Tiles,
   banner: Banner, arrivals: Arrivals, discovery: Discovery, splits: Splits, tryme: TryMe, darktiles: DarkTiles,
 }
 

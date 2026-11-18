@@ -730,3 +730,87 @@ body.no-scroll .wa-float, body.no-scroll .totop, body.no-scroll-cart .wa-float, 
 .adbanner-in:hover .adbanner-shine { animation: adShine 1.6s var(--ease); }
 @keyframes adShine { to { transform: translateX(110%); } }
 @media (max-width: 640px) { .adbanner-in { width: 100%; } }
+
+/* ═══ سلايدرات وأنيميشن إضافية ═══ */
+.hero picture { position: absolute; inset: 0; }
+.hero-arrow { all: unset; cursor: pointer; position: absolute; top: 50%; z-index: 3; width: 52px; height: 52px; margin-top: -26px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.35); backdrop-filter: blur(6px); transition: background .3s, transform .3s; }
+.hero-arrow:hover { background: rgba(255,255,255,.28); transform: scale(1.08); }
+.hero-arrow.prev { inset-inline-start: 24px; }
+.hero-arrow.next { inset-inline-end: 24px; }
+[dir="rtl"] .hero-arrow .ic { transform: scaleX(-1); }
+[dir="rtl"] .hero-arrow .flip-x { transform: none; }
+@media (max-width: 640px) { .hero-arrow { width: 40px; height: 40px; margin-top: -20px; } .hero-arrow.prev { inset-inline-start: 10px; } .hero-arrow.next { inset-inline-end: 10px; } }
+
+.pc-media { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .4s var(--ease); }
+
+.mq { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.mq-track { display: flex; width: max-content; animation: mq var(--mq, 40s) linear infinite; }
+.mq.rev .mq-track { animation-direction: reverse; }
+.mq:hover .mq-track { animation-play-state: paused; }
+.mq-group { display: flex; flex: none; }
+[dir="rtl"] .mq-track { animation-name: mqr; }
+@keyframes mq { to { transform: translateX(-50%); } }
+@keyframes mqr { to { transform: translateX(50%); } }
+
+.tmq { background: var(--ink); color: #f1e3bf; padding-block: 16px; border-top: 1px solid #2f281f; }
+.tmq span { display: inline-flex; align-items: center; gap: 28px; padding-inline: 14px; font: 400 clamp(18px, 2vw, 26px) var(--head); white-space: nowrap; letter-spacing: .04em; }
+.tmq img { height: 26px; width: auto; filter: brightness(1.2); }
+
+.bmq { background: linear-gradient(180deg, var(--ivory), var(--sand)); overflow: hidden; }
+.bmq .mq + .mq { margin-top: 18px; }
+.bmq-item { flex: none; width: 170px; margin-inline: 10px; display: grid; justify-items: center; gap: 8px; padding: 14px 10px; background: #fff; border: 1px solid var(--line); transition: transform .5s var(--ease), box-shadow .5s, border-color .3s; }
+.bmq-item img { height: 170px; width: auto; object-fit: contain; transition: transform .7s var(--ease); }
+.bmq-item span { font: 500 16px var(--head); text-align: center; line-height: 1.3; }
+.bmq-item:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 26px 40px -30px rgba(0,0,0,.45); }
+.bmq-item:hover img { transform: scale(1.08) rotate(-3deg); }
+
+.spot { position: relative; overflow: hidden; background: radial-gradient(ellipse at 70% 40%, #3a2a16, #120d08 70%); color: #f4e8cc; padding-block: clamp(60px, 7vw, 100px) 30px; }
+.spot-bg { position: absolute; inset: -20%; background-size: 40% auto; background-repeat: no-repeat; background-position: 80% 50%; filter: blur(70px) saturate(1.4); opacity: .45; animation: fadeIn 1.2s var(--ease); }
+.spot-in { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; min-height: 460px; }
+.spot-txt > * { animation: fadeUp .8s var(--ease) both; }
+.spot-txt > *:nth-child(2) { animation-delay: .08s; } .spot-txt > *:nth-child(3) { animation-delay: .16s; } .spot-txt > *:nth-child(4) { animation-delay: .24s; } .spot-txt > *:nth-child(5) { animation-delay: .32s; }
+.spot .eyebrow { color: var(--gold-2); }
+.spot h2 { font-size: clamp(42px, 5.5vw, 80px); font-weight: 400; line-height: 1.05; margin-bottom: 8px; background: var(--gold-grad); background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: fadeUp .8s var(--ease) .08s both, shimmer 7s linear infinite; }
+.spot-tag { font: italic 400 20px var(--head); color: #d9c9a4; margin-bottom: 22px; }
+.spot-notes { display: grid; gap: 10px; margin: 0 0 28px; }
+.spot-notes div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(243, 226, 176, .15); animation: fadeUp .7s var(--ease) both; animation-delay: calc(.3s + var(--i) * .1s); }
+.spot-notes dt { color: var(--gold-2); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+:lang(ar) .spot-notes dt { letter-spacing: 0; font-size: 14px; }
+.spot-notes dd { margin: 0; color: #efe3c6; }
+.spot-art { position: relative; height: 460px; display: grid; place-items: center; }
+.spot-ring { position: absolute; width: 380px; height: 380px; border-radius: 50%; border: 1px solid rgba(243, 214, 140, .35); box-shadow: 0 0 80px rgba(216, 178, 90, .25) inset; animation: spin 30s linear infinite; }
+.spot-ring::before { content: ""; position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; border-radius: 50%; background: var(--gold-2); box-shadow: 0 0 20px var(--gold-2); }
+.spot-art img { position: relative; height: 430px; width: auto; filter: drop-shadow(0 40px 50px rgba(0,0,0,.6)); animation: spotIn 1s var(--ease) both, floaty 6s ease-in-out 1s infinite; }
+.spot-art .spot-box { position: absolute; height: 300px; inset-inline-end: 4%; bottom: 10px; opacity: .9; animation: spotBox 1.1s var(--ease) .15s both; filter: drop-shadow(0 30px 40px rgba(0,0,0,.5)) brightness(.95); }
+@keyframes spotIn { from { opacity: 0; transform: translateY(40px) scale(.9) rotate(-6deg); } }
+@keyframes spotBox { from { opacity: 0; transform: translateX(60px) rotate(8deg); } }
+@keyframes floaty { 50% { transform: translateY(-14px); } }
+.spot-nav { position: relative; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+.spot-nav button { all: unset; cursor: pointer; position: relative; display: flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border: 1px solid rgba(243, 226, 176, .2); color: #d9c9a4; font-size: 14px; overflow: hidden; transition: .3s; }
+.spot-nav img { height: 36px; width: auto; }
+.spot-nav button.on, .spot-nav button:hover { border-color: var(--gold-2); color: #fff; background: rgba(243, 226, 176, .08); }
+.spot-nav i { position: absolute; inset-inline: 0; bottom: 0; height: 2px; background: var(--gold-grad); transform-origin: left; animation: dot 5s linear; }
+[dir="rtl"] .spot-nav i { transform-origin: right; }
+@media (max-width: 900px) {
+  .spot-in { grid-template-columns: 1fr; min-height: 0; text-align: center; }
+  .spot-art { order: -1; height: 340px; }
+  .spot-art img { height: 320px; } .spot-ring { width: 280px; height: 280px; } .spot-art .spot-box { height: 200px; inset-inline-end: 6%; }
+  .spot-notes div { grid-template-columns: 1fr; gap: 2px; }
+  .spot-nav span { display: none; } .spot-nav button { padding: 6px; }
+}
+.cat-c img { animation: floaty 5s ease-in-out infinite; animation-delay: calc(var(--i, 0) * -.7s); }
+.sec-title { background: linear-gradient(var(--gold), var(--gold)) no-repeat 50% 100% / 0 2px; padding-bottom: 6px; transition: background-size 1.2s var(--ease) .3s; }
+.sec-head.is-center.in .sec-title { background-size: 60px 2px; }
+@media (prefers-reduced-motion: reduce) { .mq-track, .spot-ring, .spot-art img, .cat-c img { animation: none !important; } }
+[dir="rtl"] .spot-bg { background-position: 20% 50%; }
+@media (max-width: 640px) { .hero picture:first-of-type .hero-img { object-position: center 20%; } }
+
+.about-in.no-img { grid-template-columns: 1fr; max-width: 860px; text-align: center; }
+
+/* لفة الزجاجة 360 مع السكرول — الوش الخلفي بيبان معكوس زي الزجاج الحقيقي */
+.pc-flip .pc-front { position: absolute; inset: 7% 8% 11%; perspective: 900px; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.pc-flip .pc-front img.spin { position: static; inset: auto; width: 100%; height: 100%; object-fit: contain; backface-visibility: visible; -webkit-backface-visibility: visible; filter: drop-shadow(0 18px 24px rgba(40, 28, 10, .14)); }
+img.spin { transform: rotateY(var(--spin, 0deg)); will-change: transform; transition: transform .12s linear; }
+.bmq-spin { display: block; perspective: 700px; }
+.bmq-item:hover .bmq-spin img { transform: rotateY(var(--spin, 0deg)) scale(1.08); }
+@media (prefers-reduced-motion: reduce) { img.spin { transform: none; } }
