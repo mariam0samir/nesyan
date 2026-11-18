@@ -357,14 +357,41 @@ function DarkTiles() {
   )
 }
 
+/* ───────── فيديو في نص الرئيسية ───────── */
+function VideoSection() {
+  const v = useBlock('video')
+  const { tx, u } = useLang()
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current; if (!el) return
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) el.play().catch(() => {}); else el.pause() }, { threshold: 0.25 })
+    io.observe(el); return () => io.disconnect()
+  }, [v.video_url])
+  if (!v.video_url) return null
+  return (
+    <section className="vsec" data-reveal>
+      <div className="wrap">
+        {(tx(v, 'eyebrow') || tx(v, 'title')) && <div className="vsec-head">{tx(v, 'eyebrow') && <p className="eyebrow">{tx(v, 'eyebrow')}</p>}{tx(v, 'title') && <h2>{tx(v, 'title')}</h2>}</div>}
+        <div className="vsec-frame">
+          <video ref={ref} src={v.video_url} poster={v.poster_url || undefined} muted loop playsInline preload="metadata" aria-label={tx(v, 'title')} />
+        </div>
+        {v.link && <div className="vsec-cta"><Link to={v.link} className="btn btn-line">{tx(v, 'button') || u.shopNow || 'Shop'}</Link></div>}
+      </div>
+    </section>
+  )
+}
+
 export const HOME_SECTIONS = {
   hero: Hero, tagline: Tagline, categories: Categories, adbanner: AdBanner, textmarquee: TextMarquee, spotlight: Spotlight, bottles: BottlesMarquee, novelties: Novelties, editorial: Editorial, tiles: Tiles,
-  banner: Banner, arrivals: Arrivals, discovery: Discovery, splits: Splits, tryme: TryMe, darktiles: DarkTiles,
+  banner: Banner, video: VideoSection, arrivals: Arrivals, discovery: Discovery, splits: Splits, tryme: TryMe, darktiles: DarkTiles,
 }
 
 export default function Home() {
   const h = useBlock('home')
   useEffect(() => { document.title = 'نسيان للعطور | NESYAN — عطرٌ لا يُنسى' }, [])
-  const order = lines(h.sections).filter((l) => !l.startsWith('-') && HOME_SECTIONS[l])
+  let all = lines(h.sections)
+  // لو الترتيب المحفوظ قديم ومفيهوش الفيديو، نحطه في النص بعد البانر
+  if (!all.some((l) => l.replace(/^-/, '') === 'video')) { const i = all.indexOf('banner'); all = i >= 0 ? [...all.slice(0, i + 1), 'video', ...all.slice(i + 1)] : [...all.slice(0, Math.ceil(all.length / 2)), 'video', ...all.slice(Math.ceil(all.length / 2))] }
+  const order = all.filter((l) => !l.startsWith('-') && HOME_SECTIONS[l])
   return <>{order.map((k) => { const C = HOME_SECTIONS[k]; return <C key={k} /> })}</>
 }

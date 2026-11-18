@@ -11,6 +11,7 @@ const BLOCK_INFO = {
   announce: ['شريط الإعلانات (فوق خالص)', 'كل سطر = رسالة بتتبدل لوحدها', 'home'],
   hero: ['الواجهة (السلايدر)', 'الصور بالترتيب — والشرائح: كل سطر «العنوان | السطر الصغير» — والروابط: رابط لكل شريحة بنفس الترتيب', 'home'],
   marquee: ['الشرائط المتحركة', 'الكلام: سطر لكل جملة — بتتحرك تحت الهيدر. والعنوان لشريط الزجاجات المتحرك', 'home'],
+  video: ['فيديو الرئيسية', 'ارفعي الفيديو (MP4) وصورة الغلاف — بيشتغل لوحده من غير صوت لما يظهر على الشاشة', 'home'],
   spotlight: ['سلايدر العطر المميز', 'المنتجات: slug لكل عطر في سطر — بيتقلبوا لوحدهم كل 5 ثواني', 'home'],
   adbanner: ['البانر الإعلاني (صورة تصميم)', 'صورة كاملة بالكلام اللي عليها — الأفضل عريضة 16:9. صورة الموبايل اختيارية (طولية)', 'home'],
   tagline: ['الجملة الكبيرة', '', 'home'],
@@ -32,11 +33,11 @@ const BLOCK_INFO = {
 }
 const BLOCK_GROUPS = [['home', 'الصفحة الرئيسية'], ['pages', 'الصفحات'], ['general', 'إعدادات المتجر']]
 const HOME_SECTION_NAMES = {
-  hero: 'الواجهة (السلايدر)', tagline: 'الجملة الكبيرة', categories: 'دواير الأقسام', textmarquee: 'شريط الكلام المتحرك', spotlight: 'سلايدر العطر المميز', bottles: 'شريط الزجاجات المتحرك', adbanner: 'البانر الإعلاني (ناكسوس)', novelties: 'إصدارات نسيان', editorial: 'الكارتين التحريرية', tiles: 'شبكة المجموعات',
+  hero: 'الواجهة (السلايدر)', tagline: 'الجملة الكبيرة', categories: 'دواير الأقسام', textmarquee: 'شريط الكلام المتحرك', video: 'فيديو الرئيسية', spotlight: 'سلايدر العطر المميز', bottles: 'شريط الزجاجات المتحرك', adbanner: 'البانر الإعلاني (ناكسوس)', novelties: 'إصدارات نسيان', editorial: 'الكارتين التحريرية', tiles: 'شبكة المجموعات',
   banner: 'البانر العريض', arrivals: 'تسوّق عطور نسيان', discovery: 'المجموعة المتاحة', splits: 'صورة + نص بالتبادل', tryme: 'اكتشف عطرك المميز', darktiles: 'الكارتين الغامقين',
 }
 const LABELS = {
-  sections: 'أقسام الصفحة الرئيسية', items: 'العناصر', images: 'الصور', slides: 'الشرائح', links: 'روابط الشرائح', button: 'نص الزر', title: 'العنوان', text: 'النص', eyebrow: 'العنوان الصغير',
+  sections: 'أقسام الصفحة الرئيسية', video_url: 'الفيديو (MP4)', poster_url: 'صورة الغلاف قبل ما الفيديو يشتغل', items: 'العناصر', images: 'الصور', slides: 'الشرائح', links: 'روابط الشرائح', button: 'نص الزر', title: 'العنوان', text: 'النص', eyebrow: 'العنوان الصغير',
   in_hero: 'تظهر كأول شريحة في السلايدر فوق', hero_mobile_url: 'صورة السلايدر للموبايل', sub: 'السطر الصغير', mobile_images: 'صور الموبايل للسلايدر (بنفس الترتيب — اختياري)', image_url: 'الصورة', mobile_image_url: 'صورة الموبايل (اختياري)', alt: 'وصف الصورة', image2_url: 'الصورة الثانية', hero_image_url: 'صورة الغلاف', link: 'الرابط', products: 'المنتجات (slug في كل سطر)', values: 'المميزات',
   shipping_fee: 'مصاريف الشحن (ج.م)', free_shipping_over: 'شحن مجاني للطلبات فوق (ج.م) — 0 = مفيش', cod_fee: 'رسوم الدفع عند الاستلام', instapay: 'رقم InstaPay / المحفظة', note: 'ملاحظة في صفحة الطلب',
   phone: 'التليفون', whatsapp: 'واتساب', email: 'الإيميل', address: 'العنوان', hours: 'مواعيد العمل', map_url: 'رابط الخريطة (embed)',
@@ -90,9 +91,9 @@ function Field({ f, value, onChange, toast }) {
       {f.type === 'select' && <select value={value ?? ''} onChange={(e) => onChange(e.target.value)}>{f.options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>}
       {f.type === 'image' && (
         <div className="ad-media">
-          {value && <img src={value} alt="" />}
-          <input dir="ltr" placeholder="https://… أو ارفع صورة" value={value ?? ''} onChange={(e) => onChange(e.target.value)} />
-          <span className={`ad-btn ghost sm ${busy ? 'busy' : ''}`}>{busy ? 'جاري الرفع…' : 'رفع صورة'}<input type="file" accept="image/*" onChange={pick} disabled={busy} /></span>
+          {value && (/\.(mp4|webm|mov)(\?|$)/i.test(value) ? <video src={value} muted playsInline style={{ width: 120, height: 68, objectFit: 'cover' }} /> : <img src={value} alt="" />)}
+          <input dir="ltr" placeholder="https://… أو ارفع ملف" value={value ?? ''} onChange={(e) => onChange(e.target.value)} />
+          <span className={`ad-btn ghost sm ${busy ? 'busy' : ''}`}>{busy ? 'جاري الرفع…' : (f.k || '').includes('video') ? 'رفع فيديو' : 'رفع صورة'}<input type="file" accept={(f.k || '').includes('video') ? 'video/mp4,video/webm' : 'image/*'} onChange={pick} disabled={busy} /></span>
         </div>
       )}
     </Tag>

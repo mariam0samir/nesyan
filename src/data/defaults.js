@@ -774,7 +774,7 @@ export const GENDERS = { women: ['نسائي', 'Women'], men: ['رجالي', 'Me
 
 export const BLOCKS = {
   // ترتيب أقسام الرئيسية: سطر لكل قسم، و"-" قبله = مخفي
-  home: { sections: 'hero\ntextmarquee\ntagline\ncategories\nnovelties\nspotlight\neditorial\ntiles\nbanner\narrivals\nbottles\ndiscovery\nsplits\ntryme\ndarktiles\n-adbanner' },
+  home: { sections: 'hero\ntextmarquee\ntagline\ncategories\nnovelties\nspotlight\neditorial\ntiles\nbanner\nvideo\narrivals\nbottles\ndiscovery\nsplits\ntryme\ndarktiles\n-adbanner' },
   announce: {
     items_ar: 'عطر يبقى في الذاكرة .. لحظات لا تُنسى برائحة تدوم\nتركيز عالي · ثبات طويل · فوحان مميز\nاطلب الآن على واتساب 01105224649',
     items_en: 'A scent that stays in memory — unforgettable moments\nHigh concentration · Long lasting · Strong projection\nOrder now on WhatsApp 01105224649',
@@ -788,6 +788,7 @@ export const BLOCKS = {
     button_ar: 'اكتشف العطر', button_en: 'Discover',
   },
   adbanner: { in_hero: true, hero_image_url: '/media/hero-0.webp', hero_mobile_url: '/media/hero-0-m.webp', title_ar: 'ناكسوس', title_en: 'Naxos', sub_ar: 'عطر .. لا يُنسى', sub_en: 'A scent .. unforgettable', image_url: '/media/ad-naxos.webp', mobile_image_url: '/media/ad-naxos-mobile.webp', link: '/p/naxos', alt_ar: 'ناكسوس من نسيان — عطر .. لا يُنسى', alt_en: 'Naxos by Nesyan — A scent .. unforgettable' },
+  video: { video_url: '/media/video/nesyan-coffee.mp4', poster_url: '/media/video/nesyan-coffee.jpg', eyebrow_ar: 'من عالم نسيان', eyebrow_en: 'The world of Nesyan', title_ar: 'عطر .. لا يُنسى', title_en: 'A scent .. unforgettable', button_ar: 'تسوّقي العطور', button_en: 'Shop the scents', link: '/shop' },
   marquee: {
     items_ar: 'عطر .. لا يُنسى\nتركيز عالي\nثبات يدوم طويلًا\nفوحان مميز\nالحجم 50 مل\nاطلب على واتساب',
     items_en: 'A scent .. unforgettable\nHigh concentration\nLong lasting\nStrong projection\n50 ml\nOrder on WhatsApp',
