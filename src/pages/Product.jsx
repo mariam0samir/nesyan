@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useLang } from '../lib/i18n'
 import { useCart, useProducts, useProduct, useBlock, sizesOf, money, commas, lines, waLink, useReady } from '../lib/store'
-import { Icon, Meter, ProductCard, Rail, flyToCart, Bottle3D } from '../components/ui'
+import { Icon, Meter, ProductCard, Rail, flyToCart, PhotoSpin } from '../components/ui'
 import { FAMILIES, GENDERS } from '../data/defaults'
 import NotFound from './NotFound'
 
@@ -60,7 +60,7 @@ function ProductView({ p }) {
               {imgs.map((src, k) => <button key={src} type="button" className={k === img ? 'on' : ''} onClick={() => setImg(k)} aria-label={[u.bottle, u.box, u.both][k] || String(k + 1)}><img src={src} alt="" className={src.includes('/media/') ? 'photo' : ''} /></button>)}
             </div>
             <div className={`pg-main ${img === -1 ? 'is-3d' : ''}`} onMouseMove={(e) => { if (img === -1) return; const r = e.currentTarget.getBoundingClientRect(); setZoom({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 }) }} onMouseLeave={() => setZoom(null)}>
-              {img === -1 ? <><Bottle3D p={p} auto={0.5} drag zoom={0.92} /><span className="pg-hint">↔ {u.dragRotate}</span></> : <img key={img} src={imgs[img]} className={imgs[img]?.includes('/media/') ? 'photo' : ''} alt={tx(p, 'name')} style={zoom ? { transformOrigin: `${zoom.x}% ${zoom.y}%`, transform: 'scale(1.6)' } : undefined} />}
+              {img === -1 ? <><PhotoSpin p={p} auto={0.5} drag /><span className="pg-hint">↔ {u.dragRotate}</span></> : <img key={img} src={imgs[img]} className={imgs[img]?.includes('/media/') ? 'photo' : ''} alt={tx(p, 'name')} style={zoom ? { transformOrigin: `${zoom.x}% ${zoom.y}%`, transform: 'scale(1.6)' } : undefined} />}
               <div className="pg-badges">{p.is_new && <span className="bdg">{u.new}</span>}{p.is_exclusive && <span className="bdg red">{u.exclusive}</span>}</div>
               {imgs.length > 1 && <div className="pg-switch"><button type="button" className={img === -1 ? 'on' : ''} onClick={() => setImg(-1)}>360°</button>{imgs.slice(0, 2).map((_, k) => <button key={k} type="button" className={k === img ? 'on' : ''} onClick={() => setImg(k)}>{[u.bottle, u.box][k]}</button>)}</div>}
             </div>

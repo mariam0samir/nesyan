@@ -103,6 +103,48 @@ export function Bottle3D({ p, spin = false, auto = 0, drag = false, zoom = 1, cl
   return <canvas ref={ref} className={`b3d ${drag ? 'is-drag' : ''} ${className}`} data-spin3d={spin ? '' : undefined} role="img" aria-label={tx(p, 'name')} />
 }
 
+/* ───────── زجاجة بتلف بصور حقيقية: وش ← نص جنب ← جنب ← ضهر ───────── */
+const SPIN_VIEWS = ['front', 'q45', 'side', 'q45', 'back', 'q45', 'side', 'q45']
+const SPIN_FLIP = [0, 0, 0, 1, 0, 0, 1, 1]
+export function PhotoSpin({ p, spin = false, auto = 0, drag = false, className = '' }) {
+  const ref = useRef(null), aRef = useRef(null), bRef = useRef(null)
+  const [ok, setOk] = useState(null)
+  const { tx } = useLang()
+  const src = (v) => (v === 'front' ? p.image_url : `/products/${p.slug}-${v}.webp`)
+  useEffect(() => {
+    let alive = true, n = 0
+    ;['back', 'side', 'q45'].forEach((v) => { const im = new Image(); im.onload = () => { if (alive && ++n === 3) setOk(true) }; im.onerror = () => alive && setOk(false); im.src = src(v) })
+    return () => { alive = false }
+  }, [p.slug])
+  useEffect(() => {
+    const el = ref.current; if (!ok || !el) return
+    let angle = -0.35, dragging = false, raf = 0, last = 0
+    const paint = () => {
+      let d = (((angle + 0.35) * 180) / Math.PI) % 360; if (d < 0) d += 360
+      const pos = d / 45, i = Math.floor(pos) % 8, j = (i + 1) % 8, f = pos - Math.floor(pos)
+      const set = (img, k, o) => { const s2 = src(SPIN_VIEWS[k]); if (img.dataset.s !== s2) { img.src = s2; img.dataset.s = s2 } img.style.transform = SPIN_FLIP[k] ? 'scaleX(-1)' : ''; img.style.opacity = o }
+      set(aRef.current, i, 1); set(bRef.current, j, f.toFixed(3))
+    }
+    const h = { setAngle(a) { angle = a; paint() }, get angle() { return angle }, setDrag(v) { dragging = v } }
+    el.__b3d = h; paint()
+    const tick = (t) => { if (auto && !dragging) { angle += auto * Math.min(0.05, (t - (last || t)) / 1000); paint() } last = t; raf = requestAnimationFrame(tick) }
+    if (auto) raf = requestAnimationFrame(tick)
+    let x0 = 0, a0 = 0, moved = false
+    const dn = (e) => { if (!drag) return; dragging = true; x0 = e.clientX; a0 = angle; moved = false; el.setPointerCapture?.(e.pointerId) }
+    const mv = (e) => { if (!drag || !el.hasPointerCapture?.(e.pointerId)) return; const dx = e.clientX - x0; if (Math.abs(dx) > 3) moved = true; h.setAngle(a0 + dx * 0.012) }
+    const up = () => { if (drag) setTimeout(() => { dragging = false }, moved ? 1500 : 0) }
+    el.addEventListener('pointerdown', dn); el.addEventListener('pointermove', mv); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up)
+    return () => { cancelAnimationFrame(raf); el.removeEventListener('pointerdown', dn); el.removeEventListener('pointermove', mv); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up) }
+  }, [ok, p.slug, p.image_url, auto, drag])
+  if (ok === false) return <Bottle3D p={p} spin={spin} auto={auto} drag={drag} className={className} />
+  return (
+    <div ref={ref} className={`pspin ${drag ? 'is-drag' : ''} ${className}`} data-spin3d={spin ? '' : undefined} role="img" aria-label={tx(p, 'name')}>
+      <img ref={aRef} src={p.image_url} alt="" draggable="false" />
+      <img ref={bRef} alt="" draggable="false" style={{ opacity: 0 }} />
+    </div>
+  )
+}
+
 /* ───────── الزجاجة بتلف 360 درجة مع السكرول (وبتبان من ضهرها) ───────── */
 export function useScrollSpin() {
   const { pathname } = useLocation()
@@ -117,14 +159,10 @@ export function useScrollSpin() {
         const r = el.getBoundingClientRect()
         if (r.bottom < -50 || r.top > vh + 50) return
         const p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)))
-        el.__b3d.setAngle(-0.35 + p * Math.PI * 2)
-      })
-      document.querySelectorAll('[data-spin]').forEach((el) => {
-        const r = el.getBoundingClientRect()
-        if (r.bottom < -50 || r.top > vh + 50) return
-        // من أول ما تدخل الشاشة لحد ما تخرج = لفة كاملة
-        const p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)))
-        el.style.setProperty('--spin', `${(p * 360).toFixed(1)}deg`)
+        // لفّتين أسرع، والوش بيقف شوية والضهر بيعدّي بسرعة
+        const turns = p * 2, n = Math.floor(turns), t = turns - n
+        const g = t - (0.85 * Math.sin(2 * Math.PI * t)) / (2 * Math.PI)
+        el.__b3d.setAngle(-0.35 + (n + g) * Math.PI * 2)
       })
     }
     const on = () => { if (!raf) raf = requestAnimationFrame(run) }
@@ -195,7 +233,7 @@ export function ProductCard({ p, notes = false, i = 0 }) {
           {sale && <span className="bdg gold" dir="ltr">-{Math.round((1 - s.price / s.compare) * 100)}%</span>}
         </div>
         <div className="pc-flip">
-          <div className="pc-front"><Bottle3D p={p} spin zoom={0.8} /></div>
+          <div className="pc-front"><PhotoSpin p={p} spin /></div>
           <img className="pc-back" src={p.box_url || p.image_url} alt="" loading="lazy" />
         </div>
         <span className="pc-shine" />
