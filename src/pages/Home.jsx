@@ -264,7 +264,7 @@ function Arrivals() {
     <section className="sec wrap arrivals">
       <SecHead eyebrow={tx(b, 'eyebrow')} title={tx(b, 'title')} />
       <div className="tabs" role="tablist" data-reveal>{tabs.map(([k, l]) => <button key={k} type="button" role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{l}</button>)}</div>
-      <div className="grid4" key={tab}>{list.map((p, k) => <ProductCard key={p.slug} p={p} i={k} />)}</div>
+      <div className="grid4" key={tab}>{list.map((p, k) => <ProductCard key={p.slug} p={p} notes i={k} />)}</div>
       <div className="center"><Link to="/shop" className="btn btn-dark">{u.viewAll}</Link></div>
     </section>
   )

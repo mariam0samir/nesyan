@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useLang } from '../lib/i18n'
 import { useCart, useProducts, useProduct, useBlock, sizesOf, money, commas, lines, waLink, useReady } from '../lib/store'
@@ -56,13 +56,12 @@ function ProductView({ p }) {
           {/* المعرض */}
           <div className="pg">
             <div className="pg-thumbs">
-              <button type="button" className={`pg-360 ${img === -1 ? 'on' : ''}`} onClick={() => setImg(-1)} aria-label="360°"><img src={p.image_url} alt="" /><b>360°</b></button>
+              <button type="button" className={`pg-360 ${img === -1 ? 'on' : ''}`} onClick={() => setImg(-1)} aria-label={tx(p, 'name')}><img src={p.image_url} alt="" /></button>
               {imgs.map((src, k) => <button key={src} type="button" className={k === img ? 'on' : ''} onClick={() => setImg(k)} aria-label={[u.bottle, u.box, u.both][k] || String(k + 1)}><img src={src} alt="" className={src.includes('/media/') ? 'photo' : ''} /></button>)}
             </div>
             <div className={`pg-main ${img === -1 ? 'is-3d' : ''}`} onMouseMove={(e) => { if (img === -1) return; const r = e.currentTarget.getBoundingClientRect(); setZoom({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 }) }} onMouseLeave={() => setZoom(null)}>
-              {img === -1 ? <><PhotoSpin p={p} auto={0.5} drag /><span className="pg-hint">↔ {u.dragRotate}</span></> : <img key={img} src={imgs[img]} className={imgs[img]?.includes('/media/') ? 'photo' : ''} alt={tx(p, 'name')} style={zoom ? { transformOrigin: `${zoom.x}% ${zoom.y}%`, transform: 'scale(1.6)' } : undefined} />}
+              {img === -1 ? <><PhotoSpin p={p} drag /><SpinLine /></> : <img key={img} src={imgs[img]} className={imgs[img]?.includes('/media/') ? 'photo' : ''} alt={tx(p, 'name')} style={zoom ? { transformOrigin: `${zoom.x}% ${zoom.y}%`, transform: 'scale(1.6)' } : undefined} />}
               <div className="pg-badges">{p.is_new && <span className="bdg">{u.new}</span>}{p.is_exclusive && <span className="bdg red">{u.exclusive}</span>}</div>
-              {imgs.length > 1 && <div className="pg-switch"><button type="button" className={img === -1 ? 'on' : ''} onClick={() => setImg(-1)}>360°</button>{imgs.slice(0, 2).map((_, k) => <button key={k} type="button" className={k === img ? 'on' : ''} onClick={() => setImg(k)}>{[u.bottle, u.box][k]}</button>)}</div>}
             </div>
           </div>
 
@@ -154,6 +153,20 @@ function ProductView({ p }) {
         <div className="wrap"><h2 className="sec-title center-t" data-reveal>{u.youMayLike}</h2></div>
         <Rail className="wrap" auto={3500}>{related.map((x, k) => <ProductCard key={x.slug} p={x} i={k} />)}</Rail>
       </section>
+    </div>
+  )
+}
+
+/* خط تسحبي عليه فالزجاجة تلف */
+function SpinLine() {
+  const ref = useRef(null)
+  const [v, setV] = useState(0)
+  const handle = () => ref.current?.closest('.pg')?.querySelector('.pg-main .pspin, .pg-main canvas')?.__b3d
+  const on = (e) => { const x = Number(e.target.value); setV(x); const h = handle(); if (h) { h.setDrag?.(true); h.setAngle(-0.35 + (x / 360) * Math.PI * 2) } }
+  const end = () => { handle()?.setDrag?.(false) }
+  return (
+    <div className="spin-line" ref={ref}>
+      <input type="range" min="0" max="360" step="1" value={v} onInput={on} onChange={on} onPointerUp={end} onTouchEnd={end} aria-label="rotate" style={{ '--v': `${(v / 360) * 100}%` }} />
     </div>
   )
 }
