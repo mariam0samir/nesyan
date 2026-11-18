@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useLang } from '../lib/i18n'
 import { useBlock, useCart, useProducts, lines, pipes, money, sendMessage, waLink, commas } from '../lib/store'
-import { Icon, Logo, Socials, useReveal, Preloader, Price } from './ui'
+import { Icon, Logo, Socials, useReveal, useScrollSpin, Preloader, Price } from './ui'
 import { FAMILIES } from '../data/defaults'
 
 /* ───────── شريط الإعلانات المتحرك ───────── */
@@ -287,6 +287,7 @@ export default function Layout() {
   const { pathname } = useLocation()
   useEffect(() => { scrollTo(0, 0) }, [pathname])
   useReveal()
+  useScrollSpin()
   return (
     <>
       <Preloader />

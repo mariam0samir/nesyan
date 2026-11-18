@@ -804,3 +804,13 @@ body.no-scroll .wa-float, body.no-scroll .totop, body.no-scroll-cart .wa-float, 
 @media (prefers-reduced-motion: reduce) { .mq-track, .spot-ring, .spot-art img, .cat-c img { animation: none !important; } }
 [dir="rtl"] .spot-bg { background-position: 20% 50%; }
 @media (max-width: 640px) { .hero picture:first-of-type .hero-img { object-position: center 20%; } }
+
+.about-in.no-img { grid-template-columns: 1fr; max-width: 860px; text-align: center; }
+
+/* لفة الزجاجة 360 مع السكرول — الوش الخلفي بيبان معكوس زي الزجاج الحقيقي */
+.pc-flip .pc-front { position: absolute; inset: 7% 8% 11%; perspective: 900px; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.pc-flip .pc-front img.spin { position: static; inset: auto; width: 100%; height: 100%; object-fit: contain; backface-visibility: visible; -webkit-backface-visibility: visible; filter: drop-shadow(0 18px 24px rgba(40, 28, 10, .14)); }
+img.spin { transform: rotateY(var(--spin, 0deg)); will-change: transform; transition: transform .12s linear; }
+.bmq-spin { display: block; perspective: 700px; }
+.bmq-item:hover .bmq-spin img { transform: rotateY(var(--spin, 0deg)) scale(1.08); }
+@media (prefers-reduced-motion: reduce) { img.spin { transform: none; } }

@@ -81,6 +81,30 @@ export function useReveal() {
   }, [pathname])
 }
 
+/* ───────── الزجاجة بتلف 360 درجة مع السكرول (وبتبان من ضهرها) ───────── */
+export function useScrollSpin() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let raf = 0
+    const run = () => {
+      raf = 0
+      const vh = innerHeight
+      document.querySelectorAll('[data-spin]').forEach((el) => {
+        const r = el.getBoundingClientRect()
+        if (r.bottom < -50 || r.top > vh + 50) return
+        // من أول ما تدخل الشاشة لحد ما تخرج = لفة كاملة
+        const p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)))
+        el.style.setProperty('--spin', `${(p * 360).toFixed(1)}deg`)
+      })
+    }
+    const on = () => { if (!raf) raf = requestAnimationFrame(run) }
+    run(); addEventListener('scroll', on, { passive: true }); addEventListener('resize', on)
+    const t = setInterval(on, 800)
+    return () => { removeEventListener('scroll', on); removeEventListener('resize', on); clearInterval(t); cancelAnimationFrame(raf) }
+  }, [pathname])
+}
+
 /* ───────── شاشة التحميل ───────── */
 export function Preloader() {
   const [gone, setGone] = useState(false)
@@ -129,7 +153,7 @@ export function ProductCard({ p, notes = false, i = 0 }) {
   const sale = s.price > 0 && s.compare > s.price
   const quick = (e) => {
     e.preventDefault(); add(p.slug, s.label); setDone(true); setTimeout(() => setDone(false), 1400)
-    flyToCart(e.currentTarget.closest('.pcard')?.querySelector('.pc-front'))
+    flyToCart(e.currentTarget.closest('.pcard')?.querySelector('.pc-front img'))
   }
   return (
     <article className={`pcard ${flip ? 'is-flipped' : ''}`} style={{ '--i': i }} data-reveal
@@ -142,7 +166,7 @@ export function ProductCard({ p, notes = false, i = 0 }) {
           {sale && <span className="bdg gold" dir="ltr">-{Math.round((1 - s.price / s.compare) * 100)}%</span>}
         </div>
         <div className="pc-flip">
-          <img className="pc-front" src={p.image_url} alt={tx(p, 'name')} loading="lazy" />
+          <div className="pc-front"><img className="spin" data-spin src={p.image_url} alt={tx(p, 'name')} loading="lazy" /></div>
           <img className="pc-back" src={p.box_url || p.image_url} alt="" loading="lazy" />
         </div>
         <span className="pc-shine" />
@@ -213,7 +237,7 @@ export function Rail({ children, className = '', auto = 0 }) {
     return () => { el.removeEventListener('pointerdown', dn); window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); el.removeEventListener('click', ck, true) }
   }, [])
   return (
-    <div className={`rail ${className}`} onMouseEnter={() => { paused.current = true }} onMouseLeave={() => { paused.current = false }} onTouchStart={() => { paused.current = true }} onTouchEnd={() => { setTimeout(() => { paused.current = false }, 4000) }}>
+    <div className={`rail ${className} ${auto ? 'is-auto' : ''}`} onPointerDown={() => { paused.current = true }} onPointerUp={() => { setTimeout(() => { paused.current = false }, 2500) }} onTouchEnd={() => { setTimeout(() => { paused.current = false }, 2500) }}>
       <button type="button" className="rail-btn prev" onClick={() => go(-1)} aria-label={u.prev}><Icon name="chev" size={18} className="flip-x" /></button>
       <div className="rail-track" ref={ref}>{children}</div>
       <button type="button" className="rail-btn next" onClick={() => go(1)} aria-label={u.next}><Icon name="chev" size={18} /></button>

@@ -13,9 +13,9 @@ export function About() {
   return (
     <div className="about">
       <section className="phero"><img src={a.hero_image_url} alt="" /><div className="phero-in" data-reveal><img src="/brand/mark.png" alt="" /><h1>{tx(a, 'title')}</h1></div></section>
-      <section className="sec wrap about-in">
+      <section className={`sec wrap about-in ${a.image2_url ? '' : 'no-img'}`}>
         <div className="about-txt" data-reveal>{paras.map((p, k) => <p key={k} className={k === 0 ? 'lead' : ''}>{p}</p>)}</div>
-        <div className="about-img" data-reveal><img src={a.image2_url} alt="" loading="lazy" /></div>
+        {a.image2_url && <div className="about-img" data-reveal><img src={a.image2_url} alt="" loading="lazy" /></div>}
       </section>
       <section className="sec wrap">
         <SecHead title={u.ourValues} />

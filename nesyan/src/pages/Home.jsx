@@ -8,10 +8,19 @@ import { Icon, ProductCard, Rail, SecHead, Price, ScentFinder, Marquee } from '.
 function Hero() {
   const h = useBlock('hero')
   const { tx, u } = useLang()
-  const imgs = lines(h.images)
-  const mimgs = lines(h.mobile_images)
-  const slides = pipes(tx(h, 'slides'))
-  const links = lines(h.links)
+  const ad = useBlock('adbanner')
+  let imgs = lines(h.images)
+  let mimgs = lines(h.mobile_images)
+  let slides = pipes(tx(h, 'slides'))
+  let links = lines(h.links)
+  // صورة البانر الإعلاني بتبقى أول شريحة في السلايدر (لو مش موجودة فيه أصلًا)
+  if (ad.in_hero !== false && ad.hero_image_url && !imgs.includes(ad.hero_image_url)) {
+    const pad = (a) => [...a, ...Array(Math.max(0, imgs.length - a.length)).fill('')]
+    imgs = [ad.hero_image_url, ...imgs]
+    mimgs = [ad.hero_mobile_url || '', ...pad(mimgs)]
+    slides = [[tx(ad, 'title'), tx(ad, 'sub')], ...slides]
+    links = [ad.link || '/shop', ...pad(links)]
+  }
   const n = Math.max(imgs.length, 1)
   const [i, setI] = useState(0)
   const canvas = useRef(null)
@@ -73,6 +82,7 @@ function Tagline() {
 /* ───────── بانر إعلاني (صورة تصميم كاملة) ───────── */
 function AdBanner() {
   const b = useBlock('adbanner')
+  if (b.in_hero !== false && b.hero_image_url) return null
   const { tx } = useLang()
   if (!b.image_url) return null
   return (
@@ -113,7 +123,7 @@ function Novelties() {
   return (
     <section className="sec novelties">
       <div className="wrap"><SecHead title={tx(b, 'title')} center={false} /></div>
-      <Rail className="wrap" auto={3200}>{list.map((p, k) => <ProductCard key={p.slug} p={p} notes i={k} />)}</Rail>
+      <Rail className="wrap" auto={2600}>{list.map((p, k) => <ProductCard key={p.slug} p={p} notes i={k} />)}</Rail>
     </section>
   )
 }
@@ -138,7 +148,7 @@ function BottlesMarquee() {
   const all = useProducts()
   if (!all.length) return null
   const half = Math.ceil(all.length / 2)
-  const row = (list) => list.map((p) => <Link key={p.slug} to={`/p/${p.slug}`} className="bmq-item"><img src={p.image_url} alt="" loading="lazy" /><span>{tx(p, 'name')}</span></Link>)
+  const row = (list) => list.map((p) => <Link key={p.slug} to={`/p/${p.slug}`} className="bmq-item"><span className="bmq-spin"><img className="spin" data-spin src={p.image_url} alt="" loading="lazy" /></span><span>{tx(p, 'name')}</span></Link>)
   return (
     <section className="sec bmq">
       <div className="wrap"><SecHead eyebrow={tx(b, 'eyebrow')} title={tx(b, 'title')} /></div>

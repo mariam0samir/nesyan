@@ -37,7 +37,7 @@ const HOME_SECTION_NAMES = {
 }
 const LABELS = {
   sections: 'أقسام الصفحة الرئيسية', items: 'العناصر', images: 'الصور', slides: 'الشرائح', links: 'روابط الشرائح', button: 'نص الزر', title: 'العنوان', text: 'النص', eyebrow: 'العنوان الصغير',
-  mobile_images: 'صور الموبايل للسلايدر (بنفس الترتيب — اختياري)', image_url: 'الصورة', mobile_image_url: 'صورة الموبايل (اختياري)', alt: 'وصف الصورة', image2_url: 'الصورة الثانية', hero_image_url: 'صورة الغلاف', link: 'الرابط', products: 'المنتجات (slug في كل سطر)', values: 'المميزات',
+  in_hero: 'تظهر كأول شريحة في السلايدر فوق', hero_mobile_url: 'صورة السلايدر للموبايل', sub: 'السطر الصغير', mobile_images: 'صور الموبايل للسلايدر (بنفس الترتيب — اختياري)', image_url: 'الصورة', mobile_image_url: 'صورة الموبايل (اختياري)', alt: 'وصف الصورة', image2_url: 'الصورة الثانية', hero_image_url: 'صورة الغلاف', link: 'الرابط', products: 'المنتجات (slug في كل سطر)', values: 'المميزات',
   shipping_fee: 'مصاريف الشحن (ج.م)', free_shipping_over: 'شحن مجاني للطلبات فوق (ج.م) — 0 = مفيش', cod_fee: 'رسوم الدفع عند الاستلام', instapay: 'رقم InstaPay / المحفظة', note: 'ملاحظة في صفحة الطلب',
   phone: 'التليفون', whatsapp: 'واتساب', email: 'الإيميل', address: 'العنوان', hours: 'مواعيد العمل', map_url: 'رابط الخريطة (embed)',
   instagram: 'إنستجرام', facebook: 'فيسبوك', tiktok: 'تيك توك', snapchat: 'سناب شات', x: 'X (تويتر)', youtube: 'يوتيوب',
