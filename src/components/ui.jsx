@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useLang } from '../lib/i18n'
 import { useBlock, useCart, useProducts, money, minPrice, mainSize, sizesOf, commas, waLink } from '../lib/store'
-import { FAMILIES, GENDERS } from '../data/defaults'
+import { FAMILIES, GENDERS, PRODUCTS } from '../data/defaults'
+import { getEngine } from '../lib/bottle3d'
 
 /* ───────── الأيقونات ───────── */
 const ICONS = {
@@ -81,6 +82,27 @@ export function useReveal() {
   }, [pathname])
 }
 
+/* ───────── زجاجة 3D حقيقية (بتلف وتبان من ضهرها من غير كتابة) ───────── */
+export function Bottle3D({ p, spin = false, auto = 0, drag = false, zoom = 1, className = '' }) {
+  const ref = useRef(null)
+  const [fail, setFail] = useState(false)
+  const { tx } = useLang()
+  useEffect(() => {
+    const el = ref.current; const eng = getEngine()
+    if (!el || !eng) { setFail(true); return }
+    const h = eng.add(el, { color: p.liquid || PRODUCTS.find((x) => x.slug === p.slug)?.liquid || '#d9a53a', name: p.name_en || p.name_ar, auto, zoom })
+    el.__b3d = h
+    let x0 = 0, a0 = 0, moved = false
+    const dn = (e) => { if (!drag) return; h.setDrag(true); x0 = e.clientX; a0 = h.angle; moved = false; el.setPointerCapture?.(e.pointerId) }
+    const mv = (e) => { if (!drag || !el.hasPointerCapture?.(e.pointerId)) return; const dx = e.clientX - x0; if (Math.abs(dx) > 3) moved = true; h.setAngle(a0 + dx * 0.012) }
+    const up = () => { if (drag) setTimeout(() => h.setDrag(false), moved ? 1500 : 0) }
+    el.addEventListener('pointerdown', dn); el.addEventListener('pointermove', mv); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up)
+    return () => { h.remove(); el.removeEventListener('pointerdown', dn); el.removeEventListener('pointermove', mv); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up) }
+  }, [p.slug, p.liquid, auto, drag, zoom])
+  if (fail) return <img src={p.image_url} alt={tx(p, 'name')} className={className} loading="lazy" />
+  return <canvas ref={ref} className={`b3d ${drag ? 'is-drag' : ''} ${className}`} data-spin3d={spin ? '' : undefined} role="img" aria-label={tx(p, 'name')} />
+}
+
 /* ───────── الزجاجة بتلف 360 درجة مع السكرول (وبتبان من ضهرها) ───────── */
 export function useScrollSpin() {
   const { pathname } = useLocation()
@@ -90,6 +112,13 @@ export function useScrollSpin() {
     const run = () => {
       raf = 0
       const vh = innerHeight
+      document.querySelectorAll('[data-spin3d]').forEach((el) => {
+        if (!el.__b3d) return
+        const r = el.getBoundingClientRect()
+        if (r.bottom < -50 || r.top > vh + 50) return
+        const p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)))
+        el.__b3d.setAngle(-0.35 + p * Math.PI * 2)
+      })
       document.querySelectorAll('[data-spin]').forEach((el) => {
         const r = el.getBoundingClientRect()
         if (r.bottom < -50 || r.top > vh + 50) return
@@ -153,7 +182,7 @@ export function ProductCard({ p, notes = false, i = 0 }) {
   const sale = s.price > 0 && s.compare > s.price
   const quick = (e) => {
     e.preventDefault(); add(p.slug, s.label); setDone(true); setTimeout(() => setDone(false), 1400)
-    flyToCart(e.currentTarget.closest('.pcard')?.querySelector('.pc-front img'))
+    flyToCart(e.currentTarget.closest('.pcard')?.querySelector('.pc-front canvas, .pc-front img'))
   }
   return (
     <article className={`pcard ${flip ? 'is-flipped' : ''}`} style={{ '--i': i }} data-reveal
@@ -166,7 +195,7 @@ export function ProductCard({ p, notes = false, i = 0 }) {
           {sale && <span className="bdg gold" dir="ltr">-{Math.round((1 - s.price / s.compare) * 100)}%</span>}
         </div>
         <div className="pc-flip">
-          <div className="pc-front"><img className="spin" data-spin src={p.image_url} alt={tx(p, 'name')} loading="lazy" /></div>
+          <div className="pc-front"><Bottle3D p={p} spin zoom={0.8} /></div>
           <img className="pc-back" src={p.box_url || p.image_url} alt="" loading="lazy" />
         </div>
         <span className="pc-shine" />
@@ -198,7 +227,7 @@ export function flyToCart(img) {
     const target = document.querySelector('.hdr-cart')
     if (!img || !target || matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const a = img.getBoundingClientRect(); const b = target.getBoundingClientRect()
-    const c = img.cloneNode(); c.className = 'fly'
+    const c = document.createElement('img'); c.src = img.tagName === 'CANVAS' ? img.toDataURL() : img.src; c.className = 'fly'
     Object.assign(c.style, { left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', height: a.height + 'px' })
     document.body.appendChild(c)
     requestAnimationFrame(() => Object.assign(c.style, { left: b.left + b.width / 2 - 12 + 'px', top: b.top + b.height / 2 - 12 + 'px', width: '24px', height: '30px', opacity: '.4' }))

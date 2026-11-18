@@ -13,6 +13,7 @@ const P = (o, i) => ({
 export const PRODUCTS = [
   {
     "slug": "naxos",
+    "liquid": "#dea735",
     "name_ar": "ناكسوس",
     "name_en": "Naxos",
     "gender": "men",
@@ -38,6 +39,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "paradigme",
+    "liquid": "#ece2d4",
     "name_ar": "بارادايم",
     "name_en": "Paradigme",
     "gender": "men",
@@ -63,6 +65,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "40-knots",
+    "liquid": "#93bfca",
     "name_ar": "فورتي نوتس",
     "name_en": "40 Knots",
     "gender": "men",
@@ -88,6 +91,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "arabians-tonka",
+    "liquid": "#cf902e",
     "name_ar": "أرابيانز تونكا",
     "name_en": "Arabians Tonka",
     "gender": "men",
@@ -113,6 +117,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "versace-eros",
+    "liquid": "#93d6b7",
     "name_ar": "فيرساتشي إيروس",
     "name_en": "Versace Eros",
     "gender": "men",
@@ -138,6 +143,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "erba-pura",
+    "liquid": "#fa7102",
     "name_ar": "إربا بورا",
     "name_en": "Erba Pura",
     "gender": "men",
@@ -163,6 +169,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "issey-miyake",
+    "liquid": "#bdd6e7",
     "name_ar": "إيسي مياكي",
     "name_en": "Issey Miyake",
     "gender": "men",
@@ -188,6 +195,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "acqua-di-gio",
+    "liquid": "#a3c5cf",
     "name_ar": "أكوا دي جيو",
     "name_en": "Acqua di Giò",
     "gender": "men",
@@ -213,6 +221,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "invictus",
+    "liquid": "#3dadd6",
     "name_ar": "إنفيكتوس",
     "name_en": "Invictus",
     "gender": "men",
@@ -238,6 +247,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "imperial-valley",
+    "liquid": "#ebd465",
     "name_ar": "إمبريال فالي",
     "name_en": "Imperial Valley",
     "gender": "men",
@@ -263,6 +273,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "hibiscus-mahajad",
+    "liquid": "#f67f93",
     "name_ar": "هيبيسكوس مهجاد",
     "name_en": "Hibiscus Mahajád",
     "gender": "men",
@@ -288,6 +299,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "creed-aventus",
+    "liquid": "#e9d297",
     "name_ar": "كريد أفينتوس",
     "name_en": "Creed Aventus",
     "gender": "men",
@@ -313,6 +325,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "born-in-roma",
+    "liquid": "#c6a5d4",
     "name_ar": "فالنتينو أومو بورن إن روما",
     "name_en": "Valentino Uomo Born in Roma",
     "gender": "men",
@@ -338,6 +351,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "stronger-with-you-intensely",
+    "liquid": "#ce8a41",
     "name_ar": "سترونجر ويذ يو إنتنسلي",
     "name_en": "Stronger With You Intensely",
     "gender": "men",
@@ -363,6 +377,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "one-million",
+    "liquid": "#e6b337",
     "name_ar": "وان مليون",
     "name_en": "1 Million",
     "gender": "unisex",
@@ -388,6 +403,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "ultramale",
+    "liquid": "#90aad9",
     "name_ar": "ألترامال",
     "name_en": "Ultramale",
     "gender": "men",
@@ -413,6 +429,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "asad",
+    "liquid": "#ca7928",
     "name_ar": "أسد",
     "name_en": "Asad",
     "gender": "unisex",
@@ -438,6 +455,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "rose-vanille",
+    "liquid": "#ee888e",
     "name_ar": "روز فانيلا",
     "name_en": "Rose Vanille",
     "gender": "women",
@@ -463,6 +481,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "oud-madawi",
+    "liquid": "#985e2b",
     "name_ar": "عود مداوي",
     "name_en": "Oud Madawi",
     "gender": "unisex",
@@ -488,6 +507,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "oud-isfahan",
+    "liquid": "#953427",
     "name_ar": "عود أصفهان",
     "name_en": "Oud Isfahan",
     "gender": "unisex",
@@ -513,6 +533,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "oud-bouquet",
+    "liquid": "#b96838",
     "name_ar": "عود بوكيه",
     "name_en": "Oud Bouquet",
     "gender": "unisex",
@@ -538,6 +559,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "black-orchid",
+    "liquid": "#6b3d49",
     "name_ar": "بلاك أوركيد",
     "name_en": "Black Orchid",
     "gender": "unisex",
@@ -563,6 +585,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "aventus-absolu",
+    "liquid": "#917649",
     "name_ar": "كريد أفينتوس أبسولو",
     "name_en": "Creed Aventus Absolu",
     "gender": "unisex",
@@ -588,6 +611,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "khamrah-qahwa",
+    "liquid": "#4e1902",
     "name_ar": "خمرة قهوة",
     "name_en": "Khamrah Qahwa",
     "gender": "unisex",
@@ -613,6 +637,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "oud-al-wisam",
+    "liquid": "#894d2a",
     "name_ar": "عود الوسام",
     "name_en": "Oud Al Wisam",
     "gender": "unisex",
@@ -638,6 +663,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "white-oud",
+    "liquid": "#f3ebda",
     "name_ar": "وايت عود",
     "name_en": "White Oud",
     "gender": "women",
@@ -663,6 +689,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "born-in-roma-intense",
+    "liquid": "#eca4af",
     "name_ar": "بورن إن روما إنتنس (حريمي)",
     "name_en": "Born in Roma Intense (W)",
     "gender": "women",
@@ -688,6 +715,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "khamrah-waha",
+    "liquid": "#d97d1c",
     "name_ar": "خمرة واحة",
     "name_en": "Khamrah Waha",
     "gender": "women",
@@ -713,6 +741,7 @@ export const PRODUCTS = [
   },
   {
     "slug": "scandal",
+    "liquid": "#ed9908",
     "name_ar": "سكاندال",
     "name_en": "Scandal",
     "gender": "women",

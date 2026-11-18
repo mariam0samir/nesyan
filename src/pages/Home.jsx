@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../lib/i18n'
 import { useBlock, useProducts, lines, pipes, commas } from '../lib/store'
-import { Icon, ProductCard, Rail, SecHead, Price, ScentFinder, Marquee } from '../components/ui'
+import { Icon, ProductCard, Rail, SecHead, Price, ScentFinder, Marquee, Bottle3D } from '../components/ui'
 
 /* ───────── الواجهة: سلايدر بصور كاملة وكارت أبيض في النص (Jovoy) ───────── */
 function Hero() {
@@ -148,7 +148,7 @@ function BottlesMarquee() {
   const all = useProducts()
   if (!all.length) return null
   const half = Math.ceil(all.length / 2)
-  const row = (list) => list.map((p) => <Link key={p.slug} to={`/p/${p.slug}`} className="bmq-item"><span className="bmq-spin"><img className="spin" data-spin src={p.image_url} alt="" loading="lazy" /></span><span>{tx(p, 'name')}</span></Link>)
+  const row = (list) => list.map((p) => <Link key={p.slug} to={`/p/${p.slug}`} className="bmq-item"><span className="bmq-spin"><img src={p.image_url} alt="" loading="lazy" /></span><span>{tx(p, 'name')}</span></Link>)
   return (
     <section className="sec bmq">
       <div className="wrap"><SecHead eyebrow={tx(b, 'eyebrow')} title={tx(b, 'title')} /></div>
@@ -183,7 +183,7 @@ function Spotlight() {
         </div>
         <div className="spot-art">
           <span className="spot-ring" />
-          <img key={'i' + p.slug} src={p.image_url} alt={tx(p, 'name')} />
+          <div className="spot-3d" key={'i' + p.slug}><Bottle3D p={p} auto={0.55} drag /></div>
           {p.box_url && <img key={'b' + p.slug} className="spot-box" src={p.box_url} alt="" />}
         </div>
       </div>
